@@ -1,5 +1,5 @@
 //jshint esversion:6
-
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption")
 
 const app = express();
+
+console.log(process.env.API_KEY);
 
 app.set('view engine', 'ejs');
 
@@ -22,8 +24,8 @@ const userSchema = new mongoose.Schema({   // MONGOOSE-ENCRYPTION SCHEMA TO BINA
   password: String
 });
 
-const secret = "Thisisourlittlesecret.";
-userSchema.plugin(encrypt, { secret: secret, encryptedFields: ['password'] }); // THIS PLUGIN ENCRYPT SCEMA REFERS ONLY ON PASSWORD.WE COULD WRITE "PASSWORD, EMAIL". THE WOULD BE BINARY CODE NOT ONLY FOR PASSWORD BUT ALSO FOR EMAIL.
+
+userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ['password'] }); // THIS PLUGIN ENCRYPT SCEMA REFERS ONLY ON PASSWORD.WE COULD WRITE "PASSWORD, EMAIL". THE WOULD BE BINARY CODE NOT ONLY FOR PASSWORD BUT ALSO FOR EMAIL.
 
 const User = new mongoose.model("User", userSchema);
 
